@@ -13,7 +13,7 @@ class CreateGpioTable extends Migration
      */
     public function up()
     {
-        Schema::create('gpio', function (Blueprint $table) {
+        Schema::create('gpios', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->integer('gpio_number');
