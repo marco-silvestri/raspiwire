@@ -11,7 +11,7 @@ class ToggleNas extends Controller
         exec($cmd, $output, $exitCode);
         if ($exitCode == 1){
             $exitMessage = "Success! Exited with $exitCode, NAS ok";
-            exec("mount /dev/sda2 /server_mount/nas");
+            #exec("mount /dev/sda2 /server_mount/nas");
             return $exitMessage;
         } else {
             $exitMessage = "Error! Exited with $exitCode, contact the SysAdmin";

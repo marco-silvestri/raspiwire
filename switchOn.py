@@ -11,8 +11,8 @@ if state == 0:
     state = 1
     #sleep(10)
     #nasMount = subprocess.Popen(['mount /dev/sda2 /server_mount/nas', 'More output'],
-                    stdout=subprocess.PIPE, 
-                    stderr=subprocess.PIPE)
+                    #stdout=subprocess.PIPE, 
+                    #stderr=subprocess.PIPE)
     #stdout, stderr = process.communicate()
     #stdout, stderr
     sys.exit(1)
