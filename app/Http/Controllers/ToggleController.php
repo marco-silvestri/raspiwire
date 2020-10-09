@@ -6,7 +6,7 @@ use App\Models\Gpio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 
-class ToggleNas extends Controller
+class ToggleController extends Controller
 {
 
     public function handle(Request $request){
