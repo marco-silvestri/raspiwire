@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', ['App\Http\Controllers\ToggleController', 'index']);
 
-Route::get('/switch', ['App\Http\Controllers\ToggleNas', 'handle']);
+Route::get('/switch', ['App\Http\Controllers\ToggleController', 'handle']);

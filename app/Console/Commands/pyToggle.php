@@ -11,7 +11,7 @@ class switchOnServer extends Command
      *
      * @var string
      */
-    protected $signature = 'nas:switchOn';
+    protected $signature = 'relay:toggle';
 
     /**
      * The console command description.
@@ -37,6 +37,7 @@ class switchOnServer extends Command
      */
     public function handle()
     {
-        
+        $cmd = 'python '.base_path().'/switchOn.py'
+        exec()
     }
 }
