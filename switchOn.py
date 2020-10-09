@@ -9,7 +9,7 @@ pin = 18
 while True:
     connection = sqlite3.connect("rpidb")
     cursor = connection.cursor()
-    cursor.execute("SELECT state FROM gpios WHERE gpio_number = "pin";")
+    cursor.execute("SELECT state FROM rpidb.gpios WHERE gpio_number = 18;")
     results = cursor.fetchall()
     for r in results:
         state = r
