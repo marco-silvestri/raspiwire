@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', ['App\Http\Controllers\ToggleController', 'index'])->name('home');
+Route::get('/', ['App\Http\Controllers\HomeController', 'index'])->name('home');
 
 Route::get('/switch', ['App\Http\Controllers\ToggleController', 'handle'])->name('switch');
