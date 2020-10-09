@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Gpio;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class ToggleNas extends Controller
 {
@@ -20,7 +21,7 @@ class ToggleNas extends Controller
             $pin->update('state', $newState);
         };
 
-        Artisa::call('relay:toggle');
+        Artisan::call('relay:toggle');
         return redirect()->route('home');
     }
 }

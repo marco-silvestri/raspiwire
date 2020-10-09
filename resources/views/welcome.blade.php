@@ -12,7 +12,8 @@
     <main>
         @foreach ($gpio as $pin)
         <div>
-            <form method="GET" action="{{ url('/switch') }}">
+            <form method="GET" action="{{ route('switch') }}">
+                @csrf
             <input type="hidden" value="{{$pin->gpio_number}}" id="gpioNumber" name="gpioNumber">
             <input type="hidden" value="{{$pin->state}}" id="state" name="state">
                 <button type="submit">Switch</button>
