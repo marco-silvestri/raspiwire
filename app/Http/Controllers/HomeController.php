@@ -7,7 +7,7 @@ use App\Models\Gpio;
 class HomeController extends Controller
 {
     public function index(){
-        $pin = GPIO::get();
-        return view('welcome', compact('pin'));
+        $gpio = GPIO::get();
+        return view('welcome', compact('gpio'));
     }
 }
