@@ -11,8 +11,7 @@
     </h1>
     <main>
         <div>
-            <form action="{{ url('/switch') }}" method="GET">
-                <input type="hidden" name="switch" value="toggle"> 
+            <form method="GET" action="{{ url('/switch') }}">
                 <button type="submit">Switch</button>
             </form>
         </div>

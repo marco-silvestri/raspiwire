@@ -17,7 +17,7 @@ class ToggleNas extends Controller
             return $exitMessage;
         }
 
-        return redirect('/');
+        return redirect('/')->with('exit', $exitCode);
     }
     
 }
