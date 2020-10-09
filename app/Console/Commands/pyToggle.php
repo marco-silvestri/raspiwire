@@ -37,7 +37,7 @@ class switchOnServer extends Command
      */
     public function handle()
     {
-        $cmd = 'python '.base_path().'/switchOn.py'
-        exec()
+        $cmd = 'python '.base_path().'/switchOn.py';
+        exec($cmd);
     }
 }

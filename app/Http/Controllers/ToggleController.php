@@ -20,6 +20,7 @@ class ToggleNas extends Controller
             $pin->update('state', $newState);
         };
 
+        Artisa::call('relay:toggle');
         return redirect()->route('home');
     }
 }
