@@ -16,7 +16,22 @@
         {{$state}}
         <form wire:submit.prevent="toggle">
             <input type="hidden" wire:model="state">
-            <button type="submit">Switch</button>
+            <button onclick="toggleGpioState(pinOut{{$gpioNumber}},state{{$gpioNumber}})" type="submit">Switch</button>
         </form>
         {{-- Stop trying to control. --}}
 </div>
+
+<script>
+var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
+var pinOut{{$gpioNumber}} = new Gpio({{$gpioNumber}}, 'out'); //use GPIO pin passed by blade, and specify that it is output
+var state{{$gpioNumber}} = {{$state}};
+
+function toggleGpioState(pinOut){
+    if (pinOut.readSync() === 0){ //check the pin state, if the state is 0 (or off)
+        let state = 1;
+    } else {
+        let state = 0;
+    }
+    pinOut.writeSync(state); //set pin state
+}
+</script>
