@@ -16,11 +16,7 @@
         {{$state}}
         <form wire:submit.prevent="toggle">
             <input type="hidden" wire:model="state">
-            <button onclick="toggleGpioState()" type="submit">Switch</button>
+            <button type="submit">Switch</button>
         </form>
         {{-- Stop trying to control. --}}
 </div>
-
-<script type="module">
-
-</script>
