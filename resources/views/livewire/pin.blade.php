@@ -22,7 +22,7 @@
 </div>
 
 <script>
-//var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
+var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
 var pinOut{{$gpioNumber}} = new Gpio({{$gpioNumber}}, 'out'); //use GPIO pin passed by blade, and specify that it is output
 var state{{$gpioNumber}} = {{$state}};
 
