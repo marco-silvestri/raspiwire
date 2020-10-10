@@ -21,11 +21,17 @@ class Pin extends Component
         if ($this->state == 0){
             $this->state = 1;
             $this->pin->update(['state' => $this->state]);
+            exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
+            sleep(10);
+            exec("mount ".config('app.mount_source')." ".config('app.mount_destination'));
+            
         } else {
             $this->state = 0;
             $this->pin->update(['state' => $this->state]);
+            exec("umount ".config('app.mount_source')." ".config('app.mount_destination'));
+            sleep(10);
+            exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
         }
-        exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
     }
 
     public function render(){
