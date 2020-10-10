@@ -25,7 +25,7 @@ class Pin extends Component
             $this->state = 0;
             $this->pin->update(['state' => $this->state]);
         }
-        exec("node ". base_path() ."/nodefunc.js 2>&1", $out, $err);
+        exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
         echo($out . " - ". $err);
     }
 
