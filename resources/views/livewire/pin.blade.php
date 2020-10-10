@@ -16,7 +16,7 @@
         {{$state}}
         <form wire:submit.prevent="toggle">
             <input type="hidden" wire:model="state">
-            <button type="submit">Switch</button>
+            <button wire:click="$refresh" type="submit">Switch</button>
         </form>
         {{-- Stop trying to control. --}}
 </div>

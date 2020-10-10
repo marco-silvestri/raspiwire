@@ -26,8 +26,6 @@ class Pin extends Component
             $this->pin->update(['state' => $this->state]);
         }
         exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
-        dump($out);
-        dump($err);
     }
 
     public function render(){

@@ -7,6 +7,8 @@ let Gpio = require('./node_modules/onoff/onoff').Gpio; //include onoff to intera
 let pinOut = new Gpio(pinNumber, 'out'); //use GPIO pin passed by blade, and specify that it is output
 let state = myArgs[1];
 
+toggleGpioState();
+
 function toggleGpioState(){
     if (pinOut.readSync() === 0){ //check the pin state, if the state is 0 (or off)
         state = 1;
@@ -14,4 +16,5 @@ function toggleGpioState(){
         state = 0;
     }
     pinOut.writeSync(state); //set pin state
+    console.log("State is: " + state);
 }
