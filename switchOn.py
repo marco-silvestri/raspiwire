@@ -1,43 +1,24 @@
-from gpiozero import OutputDevice
+#from gpiozero import OutputDevice
 from time import sleep
 from sys import exit
+from dotenv import load_dotenv
 import subprocess
 import sqlite3
+import os
+import pyodbc
 
-pin = 18
+load_dotenv()
 
-while True:
-    connection = sqlite3.connect("rpidb")
-    cursor = connection.cursor()
-    cursor.execute("SELECT state FROM rpidb.gpios WHERE gpio_number = 18;")
-    results = cursor.fetchall()
-    for r in results:
-        state = r
-    cursor.close()
-    connection.close()
+server = os.getenv("DB_HOST")
+db = os.getenv("DB_DATABASE")
+usr = os.getenv("DB_USERNAME")
+pwd = os.getenv("DB_PASSWORD")
 
-    relay = OutputDevice(18, active_high=state, initial_value=None)
-
-    if state == 1:
-        relay.on()
-        #sleep(10)
-        #nasMount = subprocess.Popen(['mount /dev/sda2 /server_mount/nas', 'More output'],
-                        #stdout=subprocess.PIPE, 
-                        #stderr=subprocess.PIPE)
-        #stdout, stderr = process.communicate()
-        #stdout, stderr
-        #sys.exit(1)
-    elif state == 0:
-        #sleep(10)
-        #nasMount = subprocess.Popen(['umount /dev/sda2 /server_mount/nas', 'More output'],
-        #                stdout=subprocess.PIPE, 
-        #                stderr=subprocess.PIPE)
-        #stdout, stderr = process.communicate()
-        #stdout, stderr
-        relay.off()
-        #sys.exit(0)
-    sleep(5)
-
-
-
-
+conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+ db+';UID='+usr+';PWD='+ pwd)
+cursor = conn.cursor()
+# Selecting from PyTable 
+cursor.execute("SELECT * gpios") 
+row = cursor.fetchone() 
+while row: 
+    print("%s   %s" % (row[0], row[1]))
+    row = cursor.fetchone()
