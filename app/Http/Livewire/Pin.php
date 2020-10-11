@@ -21,7 +21,7 @@ class Pin extends Component
         if ($this->state == 0){
             $this->stateChanger(1);
             exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $toggleExit);
-            sleep(15);
+            sleep(20);
             exec("sudo mount ".config('app.mount_source')." ".config('app.mount_destination'),$out, $exitCode);
         } else {
             exec("sudo umount ".config('app.mount_destination'), $out, $exitCode);
