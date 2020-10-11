@@ -13,7 +13,6 @@ class Pin extends Component
     public $pin;
 
     public function mount(){
-        //dd($this->gpioNumber);
         $this->pin = Gpio::where('gpio_number', $this->gpioNumber)->first();
     }
 
@@ -22,14 +21,13 @@ class Pin extends Component
             $this->state = 1;
             $this->pin->update(['state' => $this->state]);
             exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
-            sleep(10);
-            exec("mount ".config('app.mount_source')." ".config('app.mount_destination'));
-            
+            sleep(30);
+            exec("sudo mount ".config('app.mount_source')." ".config('app.mount_destination'));
         } else {
             $this->state = 0;
             $this->pin->update(['state' => $this->state]);
-            exec("umount ".config('app.mount_source')." ".config('app.mount_destination'));
-            sleep(10);
+            exec("sudo umount ".config('app.mount_destination'));
+            sleep(30);
             exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
         }
     }

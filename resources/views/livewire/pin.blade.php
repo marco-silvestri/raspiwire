@@ -15,6 +15,9 @@
         @endif
         {{$state}}
         <form wire:submit.prevent="toggle">
+            <div style="background-color: #FFFF00;" wire:loading>
+                 Processing your request
+            </div>
             <input type="hidden" wire:model="state">
             <button wire:click="$refresh" type="submit">Switch</button>
         </form>
