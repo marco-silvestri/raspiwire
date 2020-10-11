@@ -11,6 +11,7 @@ class Pin extends Component
     public $gpioNumber;
     public $state;
     public $pin;
+    protected $isMounted;
 
     public function mount(){
         $this->pin = Gpio::where('gpio_number', $this->gpioNumber)->first();
@@ -18,22 +19,30 @@ class Pin extends Component
 
     public function toggle(){
         if ($this->state == 0){
-            $this->state = 1;
-            $this->pin->update(['state' => $this->state]);
-            exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
-            sleep(30);
-            exec("sudo mount ".config('app.mount_source')." ".config('app.mount_destination'));
+            exec("sudo mount ".config('app.mount_source')." ".config('app.mount_destination'),$out, $exitCode);
+            if ($exitCode != 0){
+                $this->isMounted = $out;
+            } else {
+                $this->stateChanger(1);
+                exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $exitCode);
+            }
         } else {
-            $this->state = 0;
-            $this->pin->update(['state' => $this->state]);
-            exec("sudo umount ".config('app.mount_destination'));
-            sleep(30);
-            exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
+            exec("sudo umount ".config('app.mount_destination'), $out, $exitCode);
+            if($exitCode != 0){
+                $this->isMounted = $out;
+            } else {
+                $this->stateChanger(0);
+                exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
+            }
         }
     }
 
-    public function render(){
+    protected function stateChanger($state){
+        $this->state = $state;
+        $this->pin->update(['state' => $this->state]);
+    }
 
+    public function render(){
         return view('livewire.pin', $this->pin);
     }
 }

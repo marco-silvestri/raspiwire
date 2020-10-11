@@ -11,5 +11,7 @@ toggleGpioState();
 
 function toggleGpioState(){
     pinOut.writeSync(state); //set pin state
-    console.log("State is: " + pinOut.readSync());
+    if (pinOut.readSync() == state){
+        return state;
+    }
 }
