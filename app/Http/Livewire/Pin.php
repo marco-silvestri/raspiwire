@@ -23,7 +23,7 @@ class Pin extends Component
             exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
             do {
                 exec("sudo mount ".config('app.mount_source')." ".config('app.mount_destination'),$out, $exitCode);
-                sleep(15);
+                sleep(10);
             } while ($exitCode != 0);
 
             if ($exitCode == 0){
