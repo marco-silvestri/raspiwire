@@ -19,12 +19,17 @@ class Pin extends Component
 
     public function toggle(){
         if ($this->state == 0){
-            $this->stateChanger(1);
-            exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $toggleExit);
+            $state = 1;
+            exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
             do {
                 exec("sudo mount ".config('app.mount_source')." ".config('app.mount_destination'),$out, $exitCode);
+                sleep(5);
             } while ($exitCode != 0);
-            
+
+            if ($exitCode == 0){
+                $this->stateChanger($state);
+            }
+            $this->isMounted = 0;
         } else {
             exec("sudo umount -f -l ".config('app.mount_destination'), $out, $exitCode);
             if($exitCode != 0){
@@ -42,6 +47,21 @@ class Pin extends Component
     }
 
     public function render(){
-        return view('livewire.pin', $this->pin);
+        if (isset($this->isMounted)){
+            switch ($this->isMounted) {
+                case 0:
+                    $message = "Unit successfully mounted!";
+                    break;
+                case !0:
+                    $message = "Error! Device might be busy.";
+                default:
+                    $message = "42.";
+                    break;
+            }
+            session()->flash('message', $message);
+            return view('livewire.pin', $this->pin);
+        } else {
+            return view('livewire.pin', $this->pin);
+        }
     }
 }

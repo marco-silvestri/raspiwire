@@ -4,17 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home Automation</title>
+<link rel="stylesheet" href="{{asset('css/app.css')}}">
     @livewireStyles
 </head>
 <body>
-    <h1>
+    <h1 class="text-4xl leading-4 m-4 text-center">
         Home automation
     </h1>
-    <main>
+    <main class="m-8 flex sm:grid sm:grid-cols-4 sm:gap-4">
         @foreach ($gpio as $pin)
-        @livewire('pin', ['gpioNumber' => $pin->gpio_number, 'state' => $pin->state])    
-
+        @livewire('pin', ['gpioNumber' => $pin->gpio_number, 'state' => $pin->state])
         @endforeach
     </main>
     @livewireScripts
