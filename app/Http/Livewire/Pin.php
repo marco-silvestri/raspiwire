@@ -23,7 +23,7 @@ class Pin extends Component
             exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
             do {
                 exec("sudo mount ".config('app.mount_source')." ".config('app.mount_destination'),$out, $exitCode);
-                sleep(5);
+                sleep(15);
             } while ($exitCode != 0);
 
             if ($exitCode == 0){
@@ -33,10 +33,11 @@ class Pin extends Component
         } else {
             exec("sudo umount -f -l ".config('app.mount_destination'), $out, $exitCode);
             if($exitCode != 0){
-                $this->isMounted = $out;
+                $this->isMounted = $exitCode;
             } else {
                 $this->stateChanger(0);
                 exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
+                $this->isMounted = $err;
             }
         }
     }
