@@ -23,11 +23,11 @@
     </form>
     {{-- Stop trying to control. --}}
     @if (session()->has('message'))
-    <div class="bg-green-200 p-4 text-center absolute top-48 rounded-md">
+    <div class="bg-green-200 p-4 m-auto text-center absolute top-48 rounded-md">
         {{ session('message') }}
     </div>
 @endif
-    <div class="bg-orange-200 p-4 text-center absolute top-48 rounded-md" wire:loading>
+    <div class="bg-orange-200 p-4 m-auto text-center absolute top-48 rounded-md" wire:loading>
         Processing your request
     </div>
 
