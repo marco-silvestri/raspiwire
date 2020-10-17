@@ -67,9 +67,9 @@ class Nas extends Component
                     break;
             }
             session()->flash('message', $message);
-            return view('livewire.pin', $this->pin);
+            return view('livewire.nas', $this->pin);
         } else {
-            return view('livewire.pin', $this->pin);
+            return view('livewire.nas', $this->pin);
         }
     }
 }

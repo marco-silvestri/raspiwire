@@ -14,7 +14,7 @@
     </h1>
     <main class="m-8 flex sm:grid sm:grid-cols-4 sm:gap-4">
         @foreach ($gpio as $pin)
-        @livewire('pin', ['gpioNumber' => $pin->gpio_number, 'state' => $pin->state])
+        @livewire($pin->category, ['gpioNumber' => $pin->gpio_number, 'state' => $pin->state])
         @endforeach
     </main>
     @livewireScripts
