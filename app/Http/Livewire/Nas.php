@@ -16,7 +16,7 @@ class Nas extends Component
         $this->pin = Gpio::where('gpio_number', $this->gpioNumber)
             ->where('category', 'nas')
             ->first();
-            
+
         //Reset the pin's state on the DB in case of a wrong switch-off
         if (!isset($this->isMounted)){
             $this->state = 0;
@@ -67,9 +67,9 @@ class Nas extends Component
                     break;
             }
             session()->flash('message', $message);
-            return view('livewire.nas', $this->pin);
+            return view('livewire.pin', $this->pin);
         } else {
-            return view('livewire.nas', $this->pin);
+            return view('livewire.pin', $this->pin);
         }
     }
 }
