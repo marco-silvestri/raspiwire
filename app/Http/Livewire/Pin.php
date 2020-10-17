@@ -21,25 +21,11 @@ class Pin extends Component
         if ($this->state == 0){
             $state = 1;
             exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
-            do {
-                exec("sudo mount ".config('app.mount_source')." ".config('app.mount_destination'),$out, $exitCode);
-                sleep(10);
-            } while ($exitCode != 0);
-
-            if ($exitCode == 0){
-                $this->stateChanger($state);
-            }
-            $this->isMounted = 0;
-        } else {
-            exec("sudo umount -f -l ".config('app.mount_destination'), $out, $exitCode);
-            if($exitCode != 0){
-                $this->isMounted = $exitCode;
+            $this->stateChanger($state);
             } else {
                 $this->stateChanger(0);
                 exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
-                $this->isMounted = $err;
             }
-        }
     }
 
     protected function stateChanger($state){
@@ -48,13 +34,16 @@ class Pin extends Component
     }
 
     public function render(){
-        if (isset($this->isMounted)){
-            switch ($this->isMounted) {
+        if (isset($this->state)){
+            switch ($this->state) {
                 case 0:
-                    $message = "Unit successfully mounted!";
+                    $message = "Pin is now ON";
                     break;
-                case !0:
-                    $message = "Error! Device might be busy.";
+                case 1:
+                    $message = "Pin is now OFF";
+                case !0 || !1:
+                    $message = "Error! Resetting pin to OFF";
+                    $this->stateChanger(0);
                 default:
                     $message = "42.";
                     break;
