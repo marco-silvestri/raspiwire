@@ -13,6 +13,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', ['App\Http\Controllers\HomeController', 'index'])->name('home');
+//Route::get('/', ['App\Http\Controllers\HomeController', 'index'])->name('home');
 
-Route::get('/switch', ['App\Http\Controllers\ToggleController', 'handle'])->name('switch');
+//Route::get('/switch', ['App\Http\Controllers\ToggleController', 'handle'])->name('switch');
+
+/*
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+*/
+
+Route::get('/', ['App\Http\Controllers\GpioController', 'index'])->name('index');
+
+Route::middleware(['auth:sanctum', 'verified'])
+    ->group( function(){
+        Route::get('/dashboard', ['App\Http\Controllers\GpioController', 'index'])->name('dashboard');
+        Route::post('/dashboard/operations', ['App\Http\Controllers\GpioController', 'create'])->name('operations');
+        Route::post('/dashboard/create', ['App\Http\Controllers\GpioController', 'create'])->name('create');
+        Route::post('/dashboard/update', ['App\Http\Controllers\GpioController', 'create'])->name('update');
+        Route::post('/dashboard/store', ['App\Http\Controllers\GpioController', 'store'])->name('store');
+        Route::delete('/dashboard/delete', ['App\Http\Controllers\GpioController', 'destroy'])->name('delete');
+    });

@@ -5,6 +5,7 @@
     bg-yellow-200
     @endif
     ">
+    @include('livewire.shared.editform')
     <h2 class="text-xl text-cool-gray-800">Pin number:<span>{{$gpioNumber}}</span></h2>
     <div class="text-xl text-cool-gray-800">
     @if ($state == 1)

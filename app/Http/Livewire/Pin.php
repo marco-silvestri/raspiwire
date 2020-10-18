@@ -11,7 +11,6 @@ class Pin extends Component
     public $gpioNumber;
     public $state;
     public $pin;
-    protected $isMounted;
 
     public function mount(){
         $this->pin = Gpio::where('gpio_number', $this->gpioNumber)->first();

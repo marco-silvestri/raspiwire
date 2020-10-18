@@ -16,6 +16,7 @@ class Nas extends Component
         $this->pin = Gpio::where('gpio_number', $this->gpioNumber)
             ->where('category', 'nas')
             ->first();
+            //dd($this->pin);
     }
 
     public function toggle(){
