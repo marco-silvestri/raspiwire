@@ -16,6 +16,7 @@
             @csrf
             <button type="submit">Add a device</button>
         </form>
+        @livewire('downloader')
     </aside>
     <main class="m-8 flex sm:grid sm:grid-cols-4 sm:gap-4">
         @foreach ($gpio as $pin)
