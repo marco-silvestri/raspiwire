@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire;
 
-include_once __DIR__ . '/src/YouTubeDownloader.php';
-include_once __DIR__ . '/src/Browser.php';
-include_once __DIR__ . '/src/Utils.php';
-include_once __DIR__ . '/src/Parser.php';
+include_once __DIR__ . '/youtube-downloader/src/YouTubeDownloader.php';
+include_once __DIR__ . '/youtube-downloader/src/Browser.php';
+include_once __DIR__ . '/youtube-downloader/src/Utils.php';
+include_once __DIR__ . '/youtube-downloader/src/Parser.php';
 
 use Livewire\Component;
 use YouTube\YouTubeDownloader;
