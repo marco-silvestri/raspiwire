@@ -10,13 +10,14 @@
 </head>
 <body>
     <h1 class="text-4xl leading-4 m-4 text-center">
-        Dashboard automation
+        Raspiwire
     </h1>
     <main class="m-8 flex sm:grid sm:grid-cols-4 sm:gap-4">
+        @if ('count' <= config('app.max_users'))
         <div>
-        <a href="{{route('register')}}">Register</a>
+            <a href="{{route('register')}}">Register</a>
         </div>
-
+        @endif
         <div>
             <a href="{{route('login')}}">Login</a>
         </div>

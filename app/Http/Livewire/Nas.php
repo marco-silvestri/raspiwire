@@ -10,6 +10,8 @@ class Nas extends Component
     public $gpioNumber;
     public $state;
     public $pin;
+    public $category = 'nas';
+    public $name = 'My NAS';
     protected $isMounted;
 
     public function mount(){

@@ -1,0 +1,7 @@
+--2020-10-21 21:14:01--  https://redirector.googlevideo.com/videoplayback?expire=1603329230
+Loaded CA certificate '/etc/ssl/certs/ca-certificates.crt'
+Resolving redirector.googlevideo.com (redirector.googlevideo.com)... 216.58.208.142, 2a00:1450:4002:805::200e
+Connecting to redirector.googlevideo.com (redirector.googlevideo.com)|216.58.208.142|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2020-10-21 21:14:02 ERROR 404: Not Found.
+

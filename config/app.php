@@ -131,6 +131,7 @@ return [
 
     'mount_source' => env('MOUNT_SOURCE'),
     'mount_destination' => env('MOUNT_DESTINATION'),
+    'max_users' => env('MAX_USERS_ALLOWED'),
 
     /*
     |--------------------------------------------------------------------------
