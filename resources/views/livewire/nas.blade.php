@@ -1,7 +1,7 @@
 <tr @if ($state == 1)
-    class="bg-green-400">
+    class="bg-green-100">
     @else
-    class="bg-gray-400">
+    class="bg-cool-gray-200">
     @endif   
 
     <td>

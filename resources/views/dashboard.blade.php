@@ -11,13 +11,13 @@
     <h1 class="text-4xl leading-4 m-4 text-center">
         Raspiwire
     </h1>
-    <main class="m-8 flex flex-col">
+    <main class="m-8 flex flex-col justify-evenly">
         <h2>Devices</h2>
         <form action="{{route('create')}}" method="POST">
             @csrf
-            <button type="submit">Add a device</button>
+            <button class="m-2 bg-purple-400 text-xs p-1 font-thin rounded-md" type="submit">Add a device</button>
         </form>
-        <table>
+        <table class="font-thin border border-gray-400">
             <thead>
                 <tr>
                     <th>
@@ -43,6 +43,7 @@
             @endforeach
             </tbody>
         </table>
+        @livewire('metrics')
     </main>
     @livewireScripts
 </body>
