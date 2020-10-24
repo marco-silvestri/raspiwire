@@ -10,6 +10,8 @@ Raspwire aims to be a quick, modular and reactive web interface to control appli
 
   - Mounting/unmounting of harddisks (paths needs to be specified in the .env)
   - Permanent states saved on a db
+  - Added metrics (uptime and cpu temp)
+  - Added a cap on the max allowed users, for security purpose
 
 ### To be added/fixed
    - Usage of Queables to grant an asynchronous behavior
