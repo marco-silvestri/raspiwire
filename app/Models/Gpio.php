@@ -12,6 +12,7 @@ class Gpio extends Model
     protected $fillable = [
         'gpio_number',
         'state',
-        'category'
+        'category',
+        'name'
     ];
 }

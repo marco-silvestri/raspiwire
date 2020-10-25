@@ -10,15 +10,14 @@ class Nas extends Component
     public $gpioNumber;
     public $state;
     public $pin;
-    public $category = 'nas';
-    public $name = 'My NAS';
+    public $category;
+    public $name;
     protected $isMounted;
 
     public function mount(){
         $this->pin = Gpio::where('gpio_number', $this->gpioNumber)
             ->where('category', 'nas')
             ->first();
-            //dd($this->pin);
     }
 
     public function toggle(){

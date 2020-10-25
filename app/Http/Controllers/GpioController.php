@@ -40,6 +40,7 @@ class GpioController extends Controller
             $gpio->update([
                 'gpio_number' => $data['gpioNumber'],
                 'category' => $data['category'],
+                'name' => $data['name'],
             ]);
             //$message = 'Gpio device ' . $data['gpioNumber'] . ' created succesfully';
         } else {
@@ -47,6 +48,7 @@ class GpioController extends Controller
                 'gpio_number' => $data['gpioNumber'],
                 'category' => $data['category'],
                 'state' => 0,
+                'name' => $data['name'],
             ]);
             //$message = 'Whoooops, there was an error. Please try again';
         }

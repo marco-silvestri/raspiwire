@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Automation</title>
+    <title>Raspiwire</title>
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
     @livewireStyles
 </head>
@@ -12,12 +12,14 @@
         Raspiwire
     </h1>
     <main class="m-8 flex flex-col justify-evenly">
-        <h2>Devices</h2>
-        <form action="{{route('create')}}" method="POST">
-            @csrf
-            <button class="m-2 bg-purple-400 text-xs p-1 font-thin rounded-md" type="submit">Add a device</button>
-        </form>
-        <table class="font-thin border border-gray-400">
+        <div class="flex items-center">
+            <h2>Devices</h2>
+            <form action="{{route('create')}}" method="POST">
+                @csrf
+                <button class="m-2 bg-purple-400 text-xs p-1 font-thin rounded-md" type="submit">Add a device</button>
+            </form>
+        </div>
+        <table class="font-thin border border-gray-400 text-left">
             <thead>
                 <tr>
                     <th>
@@ -32,7 +34,7 @@
                     <th>
                         State:
                     </th>
-                    <th colspan="2">
+                    <th colspan="2" class="text-center">
                         Action
                     </th>
                 </tr>
