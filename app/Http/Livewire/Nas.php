@@ -23,9 +23,9 @@ class Nas extends Component
     public function toggle(){
         if ($this->state == 0){
             $state = 1;
-            exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
+            exec("sudo -S node js/toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
             do {
-                exec("sudo mount ".config('app.mount_source')." ".config('app.mount_destination'),$out, $exitCode);
+                exec("sudo -S mount ".config('app.mount_source')." ".config('app.mount_destination'),$out, $exitCode);
                 sleep(10);
             } while ($exitCode != 0);
 
@@ -34,12 +34,12 @@ class Nas extends Component
             }
             $this->isMounted = 0;
         } else {
-            exec("sudo umount -f -l ".config('app.mount_destination'), $out, $exitCode);
+            exec("sudo -S umount -f -l ".config('app.mount_destination'), $out, $exitCode);
             if($exitCode != 0){
                 $this->isMounted = $exitCode;
             } else {
                 $this->stateChanger(0);
-                exec("node ". base_path() ."/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
+                exec("sudo -S node js/toggle.js ".$this->gpioNumber . " " . $this->state, $out, $err);
                 $this->isMounted = $err;
             }
         }
