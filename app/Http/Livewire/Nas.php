@@ -25,7 +25,7 @@ class Nas extends Component
             $state = 1;
             exec("sudo -S node js/toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
             do {
-                exec("sudo -S mount ".$this->pin->mount_source." ".$this->pin->mount_destination,$out, $exitCode);
+                exec("sudo -S mount ".$this->pin->mount_source." ".$this->pin->mount_destination, $out, $exitCode);
                 sleep(10);
             } while ($exitCode != 0);
 
