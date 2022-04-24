@@ -12,6 +12,7 @@ class Nas extends Component
     public $pin;
     public $category;
     public $name;
+    public $deviceSuffix;
     protected $isMounted;
 
     public function mount(){
@@ -22,8 +23,22 @@ class Nas extends Component
 
     public function toggle(){
         if ($this->state == 0){
+
+            $totalMounted = Gpio::where('state', 1)
+            ->get()
+            ->count();
+        
+        $this->deviceSuffix = $totalMounted == 0 ? '/dev/sda2' : '/dev/sdb2';
+
+        Gpio::where('id', $this->pin->id)
+            ->update([
+                'mount_source' => $this->deviceSuffix,
+            ]);
+
+            $this->pin = $this->pin->fresh();
+
             $state = 1;
-            exec("sudo -S node {config('app.js-dir')}toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
+            exec("sudo -S node ".config('app.js-dir')."toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
             do {
                 exec("sudo -S mount ".$this->pin->mount_source." ".$this->pin->mount_destination, $out, $exitCode);
                 sleep(10);
@@ -39,7 +54,11 @@ class Nas extends Component
                 $this->isMounted = $exitCode;
             } else {
                 $this->stateChanger(0);
-                exec("sudo -S node js/toggle.js ". $this->gpioNumber . " " . $this->state, $out, $err);
+                Gpio::where('id',$this->pin->id)
+                    ->update([
+                        'mount_source' => null,
+                    ]);
+                exec("sudo -S node ".config('app.js-dir')."toggle.js ".$this->gpioNumber . " " . 0, $out, $err);
                 $this->isMounted = $err;
             }
         }
