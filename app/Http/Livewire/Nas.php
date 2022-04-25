@@ -42,6 +42,7 @@ class Nas extends Component
             Gpio::where('id', $this->pin->id)
                 ->update([
                     'mount_source' => $this->deviceSuffix,
+                    'state' => 1,
                 ]);
 
             $this->pin = $this->pin->fresh();
@@ -60,6 +61,7 @@ class Nas extends Component
             Gpio::where('id', $this->pin->id)
                 ->update([
                     'mount_source' => null,
+                    'state' => 0,
                 ]);
         }
     }
