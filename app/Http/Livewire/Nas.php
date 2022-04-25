@@ -38,7 +38,7 @@ class Nas extends Component
             $this->pin = $this->pin->fresh();
 
             $state = 1;
-            exec("sudo -S node ".config('app.js-dir')."toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
+            exec("sudo -S node /home/pi/www/raspiwire/public/js/toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
             do {
                 exec("sudo -S mount ".$this->pin->mount_source." ".$this->pin->mount_destination, $out, $exitCode);
                 sleep(10);
@@ -58,7 +58,7 @@ class Nas extends Component
                     ->update([
                         'mount_source' => null,
                     ]);
-                exec("sudo -S node ".config('app.js-dir')."toggle.js ".$this->gpioNumber . " " . 0, $out, $err);
+                exec("sudo -S node /home/pi/www/raspiwire/public/js/toggle.js ".$this->gpioNumber . " " . 0, $out, $err);
                 $this->isMounted = $err;
             }
         }
