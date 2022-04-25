@@ -23,47 +23,46 @@ class Nas extends Component
             ->first();
     }
 
-    public function toggle()
+    public function switchOn()
     {
-        if ($this->state == 0) {
-            $totalMounted = Gpio::where('state', 1)
-                ->get()
-                ->count();
+        $totalMounted = Gpio::where('state', 1)
+            ->get()
+            ->count();
 
-            $this->deviceSuffix = $totalMounted == 0 ? '/dev/sda2' : '/dev/sdb2';
+        $this->deviceSuffix = $totalMounted == 0 ? '/dev/sda2' : '/dev/sdb2';
 
-            $response = Http::withHeaders([
-                'MOUNT-POINT' => $this->deviceSuffix,
-                'MOUNT-DESTINATION' => $this->pin->mount_destination,
-                'PIN-OUT' => $this->gpioNumber,
-            ])->get('127.0.0.1:3000/switchOn');
+        $response = Http::withHeaders([
+            'MOUNT-POINT' => $this->deviceSuffix,
+            'MOUNT-DESTINATION' => $this->pin->mount_destination,
+            'PIN-OUT' => $this->gpioNumber,
+        ])->get('127.0.0.1:3000/switchOn');
 
-            abort_if($response->status() != 200, 500, "Could not fetch data");
-            Gpio::where('id', $this->pin->id)
-                ->update([
-                    'mount_source' => $this->deviceSuffix,
-                    'state' => 1,
-                ]);
+        abort_unless($response->ok(), 500, "Could not fetch data");
+        Gpio::where('id', $this->pin->id)
+            ->update([
+                'mount_source' => $this->deviceSuffix,
+                'state' => 1,
+            ]);
 
-            $this->pin = $this->pin->fresh();
-            $this->isMounted = 0;
-        } 
-        
-        if ($this->state == 1) {
-            Http::withHeaders([
-                'MOUNT-POINT' => $this->deviceSuffix ?? 'not-available',
-                'MOUNT-DESTINATION' => $this->pin->mount_destination,
-                'PIN-OUT' => $this->gpioNumber,
-            ])->get('127.0.0.1:3000/switchOff');
+        $this->pin = $this->pin->fresh();
+        $this->isMounted = 0;
+    }
 
-            abort_if($response->status() != 200, 500, "Could not fetch data");
+    public function switchOff()
+    {
+        $response = Http::withHeaders([
+            'MOUNT-POINT' => $this->deviceSuffix ?? 'not-available',
+            'MOUNT-DESTINATION' => $this->pin->mount_destination,
+            'PIN-OUT' => $this->gpioNumber,
+        ])->get('127.0.0.1:3000/switchOff');
 
-            Gpio::where('id', $this->pin->id)
-                ->update([
-                    'mount_source' => null,
-                    'state' => 0,
-                ]);
-        }
+        abort_unless($response->ok(), 500, "Could not fetch data");
+
+        Gpio::where('id', $this->pin->id)
+            ->update([
+                'mount_source' => null,
+                'state' => 0,
+            ]);
     }
 
     protected function stateChanger($state)
