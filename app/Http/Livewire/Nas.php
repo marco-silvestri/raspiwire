@@ -32,12 +32,13 @@ class Nas extends Component
 
             $this->deviceSuffix = $totalMounted == 0 ? '/dev/sda2' : '/dev/sdb2';
 
-            Http::withHeaders([
+            $response = Http::withHeaders([
                 'MOUNT-POINT' => $this->deviceSuffix,
                 'MOUNT-DESTINATION' => $this->pin->mount_destination,
                 'PIN-OUT' => $this->gpioNumber,
             ])->get('127.0.0.1:3000/switchOn');
 
+            abort_if($response->status() != 200, 500, "Could not fetch data");
             Gpio::where('id', $this->pin->id)
                 ->update([
                     'mount_source' => $this->deviceSuffix,
@@ -45,12 +46,17 @@ class Nas extends Component
 
             $this->pin = $this->pin->fresh();
             $this->isMounted = 0;
-        } else {
+        } 
+        
+        if ($this->state == 1) {
             Http::withHeaders([
                 'MOUNT-POINT' => $this->deviceSuffix ?? 'not-available',
                 'MOUNT-DESTINATION' => $this->pin->mount_destination,
                 'PIN-OUT' => $this->gpioNumber,
             ])->get('127.0.0.1:3000/switchOff');
+
+            abort_if($response->status() != 200, 500, "Could not fetch data");
+
             Gpio::where('id', $this->pin->id)
                 ->update([
                     'mount_source' => null,
