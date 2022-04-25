@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Gpio;
 use Livewire\Component;
+use Illuminate\Support\Facades\Http;
 
 class Nas extends Component
 {
@@ -15,62 +16,57 @@ class Nas extends Component
     public $deviceSuffix;
     protected $isMounted;
 
-    public function mount(){
+    public function mount()
+    {
         $this->pin = Gpio::where('gpio_number', $this->gpioNumber)
             ->where('category', 'nas')
             ->first();
     }
 
-    public function toggle(){
-        if ($this->state == 0){
-
+    public function toggle()
+    {
+        if ($this->state == 0) {
             $totalMounted = Gpio::where('state', 1)
-            ->get()
-            ->count();
-        
-        $this->deviceSuffix = $totalMounted == 0 ? '/dev/sda2' : '/dev/sdb2';
+                ->get()
+                ->count();
 
-        Gpio::where('id', $this->pin->id)
-            ->update([
-                'mount_source' => $this->deviceSuffix,
-            ]);
+            $this->deviceSuffix = $totalMounted == 0 ? '/dev/sda2' : '/dev/sdb2';
+
+            Http::withHeaders([
+                'MOUNT-POINT' => $this->deviceSuffix,
+                'MOUNT-DESTINATION' => $this->pin->mount_destination,
+                'PIN-OUT' => $this->gpioNumber,
+            ])->get('127.0.0.1:3000/switchOn');
+
+            Gpio::where('id', $this->pin->id)
+                ->update([
+                    'mount_source' => $this->deviceSuffix,
+                ]);
 
             $this->pin = $this->pin->fresh();
-
-            $state = 1;
-            exec("sudo -S node /home/pi/www/raspiwire/public/js/toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
-            do {
-                exec("sudo -S mount ".$this->pin->mount_source." ".$this->pin->mount_destination, $out, $exitCode);
-                sleep(10);
-            } while ($exitCode != 0);
-
-            if ($exitCode == 0){
-                $this->stateChanger($state);
-            }
             $this->isMounted = 0;
         } else {
-            exec("sudo -S umount -f -l ". $this->pin->mount_destination, $out, $exitCode);
-            if($exitCode != 0){
-                $this->isMounted = $exitCode;
-            } else {
-                $this->stateChanger(0);
-                Gpio::where('id',$this->pin->id)
-                    ->update([
-                        'mount_source' => null,
-                    ]);
-                exec("sudo -S node /home/pi/www/raspiwire/public/js/toggle.js ".$this->gpioNumber . " " . 0, $out, $err);
-                $this->isMounted = $err;
-            }
+            Http::withHeaders([
+                'MOUNT-POINT' => $this->deviceSuffix ?? 'not-available',
+                'MOUNT-DESTINATION' => $this->pin->mount_destination,
+                'PIN-OUT' => $this->gpioNumber,
+            ])->get('127.0.0.1:3000/switchOff');
+            Gpio::where('id', $this->pin->id)
+                ->update([
+                    'mount_source' => null,
+                ]);
         }
     }
 
-    protected function stateChanger($state){
+    protected function stateChanger($state)
+    {
         $this->state = $state;
         $this->pin->update(['state' => $this->state]);
     }
 
-    public function render(){
-        if (isset($this->isMounted)){
+    public function render()
+    {
+        if (isset($this->isMounted)) {
             switch ($this->isMounted) {
                 case 0:
                     $message = "Unit successfully mounted!";
