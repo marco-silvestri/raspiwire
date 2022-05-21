@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Gpio;
 use Livewire\Component;
+use Illuminate\Support\Facades\Storage;
 
 class Nas extends Component
 {
@@ -38,7 +39,7 @@ class Nas extends Component
             $this->pin = $this->pin->fresh();
 
             $state = 1;
-            exec("sudo -S node js/toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
+            exec("sudo -S node /home/pi/www/raspiwire/resources/js/toggle.js ".$this->gpioNumber . " " . $state, $out, $toggleExit);
             do {
                 exec("sudo -S mount ".$this->pin->mount_source." ".$this->pin->mount_destination, $out, $exitCode);
                 sleep(10);
@@ -58,10 +59,18 @@ class Nas extends Component
                     ->update([
                         'mount_source' => null,
                     ]);
-                exec("sudo -S node js/toggle.js ".$this->gpioNumber . " " . 0, $out, $err);
+                exec("sudo -S node /home/pi/www/raspiwire/resources/js/toggle.js ".$this->gpioNumber . " " . 0, $out, $err);
                 $this->isMounted = $err;
             }
         }
+    }
+
+    public function forceReset()
+    {
+        Gpio::where('id', $this->pin->id)
+        ->update([
+            'state' => 0,
+        ]);
     }
 
     protected function stateChanger($state){
