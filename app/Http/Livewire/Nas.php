@@ -37,7 +37,7 @@ class Nas extends Component
     {
         exec("sudo -S node /home/pi/www/raspiwire/resources/js/toggle.js {$this->gpioNumber} 1", $out, $toggleExit);
         do {
-            exec("sudo -S mount UUID='{$this->pin->hd_uuid} {$this->pin->mount_destination}", $out, $exitCode);
+            exec("sudo -S mount UUID='{$this->pin->hd_uuid}' {$this->pin->mount_destination}", $out, $exitCode);
             sleep(10);
         } while ($exitCode != 0);
         if ($exitCode == 0) {
