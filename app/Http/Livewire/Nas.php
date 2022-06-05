@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Gpio;
 use Livewire\Component;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
 class Nas extends Component
@@ -23,71 +24,48 @@ class Nas extends Component
             ->first();
     }
 
+    public function toggle()
+    {
+        if ($this->state == 0) {
+            $this->switchOn();
+        } else {
+            $this->switchOff();
+        }
+    }
+    
     public function switchOn()
     {
-        $totalMounted = Gpio::where('state', 1)
-            ->get()
-            ->count();
-
-        $this->deviceSuffix = $totalMounted == 0 ? '/dev/sda2' : '/dev/sdb2';
-
-        $response = Http::withHeaders([
-            'MOUNT-POINT' => $this->deviceSuffix,
-            'MOUNT-DESTINATION' => $this->pin->mount_destination,
-            'PIN-OUT' => $this->gpioNumber,
-        ])->get('127.0.0.1:3000/switchOn');
-
-        abort_unless($response->ok(), 500, "Could not fetch data");
-        Gpio::where('id', $this->pin->id)
-            ->update([
-                'mount_source' => $this->deviceSuffix,
-                'state' => 1,
-            ]);
-
-        $this->pin = $this->pin->fresh();
-        $this->isMounted = 0;
+        exec("sudo -S node /home/pi/www/raspiwire/resources/js/toggle.js {$this->gpioNumber} 1", $out, $toggleExit);
+        do {
+            exec("sudo -S mount UUID='{$this->pin->hd_uuid} {$this->pin->mount_destination}", $out, $exitCode);
+            sleep(10);
+        } while ($exitCode != 0);
+        if ($exitCode == 0) {
+            $this->pin->update(['state' => 1]);
+        }
     }
 
     public function switchOff()
     {
-        $response = Http::withHeaders([
-            'MOUNT-POINT' => $this->deviceSuffix ?? 'not-available',
-            'MOUNT-DESTINATION' => $this->pin->mount_destination,
-            'PIN-OUT' => $this->gpioNumber,
-        ])->get('127.0.0.1:3000/switchOff');
+        exec("sudo -S umount -f -l {$this->pin->mount_destination}", $out, $exitCode);
+        if ($exitCode != 0) {
+            Log::error($out);
+        } else {
+            $this->pin->update(['state' => 0]);
+            exec("sudo -S node /home/pi/www/raspiwire/resources/js/toggle.js {$this->gpioNumber} 0", $out, $err);
+            Log::info($out);
+        }
+    }
 
-        abort_unless($response->ok(), 500, "Could not fetch data");
-
-        Gpio::where('id', $this->pin->id)
-            ->update([
-                'mount_source' => null,
+    public function forceReset()
+    {
+        $this->pin->update([
                 'state' => 0,
             ]);
     }
 
-    protected function stateChanger($state)
-    {
-        $this->state = $state;
-        $this->pin->update(['state' => $this->state]);
-    }
-
     public function render()
     {
-        if (isset($this->isMounted)) {
-            switch ($this->isMounted) {
-                case 0:
-                    $message = "Unit successfully mounted!";
-                    break;
-                case !0:
-                    $message = "Error! Device might be busy.";
-                default:
-                    $message = "42.";
-                    break;
-            }
-            session()->flash('message', $message);
-            return view('livewire.nas', $this->pin);
-        } else {
-            return view('livewire.nas', $this->pin);
-        }
+        return view('livewire.nas', $this->pin);
     }
 }
