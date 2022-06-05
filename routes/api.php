@@ -28,7 +28,7 @@ Route::get('/switchOn', function () {
 
     exec("sudo -S node /home/pi/www/raspiwire/resources/js/toggle.js {$pin->gpioNumber} 1", $out, $toggleExit);
     do {
-        exec("sudo -S mount UUID='{$pin->hd_uuid}' {$pin->mount_destination}", $out, $exitCode);
+        exec("sudo -S mount UUID={$pin->hd_uuid} {$pin->mount_destination}", $out, $exitCode);
         sleep(10);
     } while ($exitCode != 0);
     if ($exitCode == 0) {
