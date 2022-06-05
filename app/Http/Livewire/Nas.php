@@ -59,9 +59,10 @@ class Nas extends Component
 
     public function forceReset()
     {
-        $this->pin->update([
-                'state' => 0,
-            ]);
+        exec("sudo -S umount -f -l {$this->pin->mount_destination}", $out, $exitCode);
+        $this->pin->update(['state' => 0]);
+        sleep(3);
+        exec("sudo -S node /home/pi/www/raspiwire/resources/js/toggle.js {$this->gpioNumber} 0", $out, $err);
     }
 
     public function render()

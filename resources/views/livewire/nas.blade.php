@@ -58,7 +58,6 @@
 
         @include('livewire.shared.editform')
 
-        @if($state == 1)
         <form wire:submit.prevent="forceReset">
             <input type="hidden" wire:model="state">
             <button class="w-8 h-8 align-middle" wire:click="$refresh" type="submit">
@@ -69,6 +68,6 @@
                 </svg>
             </button>
         </form>
-        @endif
+
     </td>
 </tr>

@@ -27,7 +27,6 @@ class AddHdUuidColumnToGpiosTable extends Migration
     {
         Schema::table('gpios', function (Blueprint $table) {
             $table->dropColumn('hd_uuid');
-            $table->dropColumn('mount_source');
         });
     }
 }
