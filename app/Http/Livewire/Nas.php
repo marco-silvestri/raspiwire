@@ -42,6 +42,7 @@ class Nas extends Component
         } while ($exitCode != 0);
         if ($exitCode == 0) {
             $this->pin->update(['state' => 1]);
+            $this->state = 1;
         }
     }
 
@@ -54,6 +55,7 @@ class Nas extends Component
         } else {
             $this->pin->update(['state' => 0]);
             exec("sudo -S node /home/pi/www/raspiwire/resources/js/toggle.js {$this->gpioNumber} 0", $out, $err);
+            $this->state = 0;
             //Log::info($out);
         }
     }
@@ -64,6 +66,7 @@ class Nas extends Component
         $this->pin->update(['state' => 0]);
         sleep(10);
         exec("sudo -S node /home/pi/www/raspiwire/resources/js/toggle.js {$this->gpioNumber} 0", $out, $err);
+        $this->state = 0;
     }
 
     public function render()
