@@ -38,12 +38,10 @@ class Nas extends Component
         sleep(5);
         do {
             exec("sudo -S mount UUID=\"{$this->pin->hd_uuid}\" {$this->pin->mount_destination}", $out, $exitCode);
-            Log::error($out);
             sleep(10);
         } while ($exitCode != 0);
         if ($exitCode == 0) {
             $this->pin->update(['state' => 1]);
-            Log::error("exitCode 0: {$out}");
         }
     }
 
@@ -51,11 +49,11 @@ class Nas extends Component
     {
         exec("sudo -S umount -f -l {$this->pin->mount_destination}", $out, $exitCode);
         if ($exitCode != 0) {
-            Log::error($out);
+            //Log::error($out);
         } else {
             $this->pin->update(['state' => 0]);
             exec("sudo -S node /home/pi/www/raspiwire/resources/js/toggle.js {$this->gpioNumber} 0", $out, $err);
-            Log::info($out);
+            //Log::info($out);
         }
     }
 
