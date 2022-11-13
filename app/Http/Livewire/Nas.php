@@ -35,7 +35,7 @@ class Nas extends Component
     public function switchOn()
     {
         exec("sudo -S node /home/pi/www/raspiwire/resources/js/toggle.js {$this->gpioNumber} 1", $out, $toggleExit);
-        sleep(5);
+        sleep(10);
         do {
             exec("sudo -S mount UUID=\"{$this->pin->hd_uuid}\" {$this->pin->mount_destination}", $out, $exitCode);
             sleep(10);
@@ -48,6 +48,7 @@ class Nas extends Component
     public function switchOff()
     {
         exec("sudo -S umount -f -l {$this->pin->mount_destination}", $out, $exitCode);
+        sleep(10);
         if ($exitCode != 0) {
             //Log::error($out);
         } else {
